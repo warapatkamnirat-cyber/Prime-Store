@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Prime Store (High Quality UI)</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ตั้งค่าตัวแปรสีและความละเอียดสูง (High Fidelity Variables) --- */
+        :root {
+            --bg-dark: #02040a;          /* พื้นหลังดำสนิท */
+            --bg-panel: rgba(11, 19, 43, 0.8); /* สีพื้นหลังแผงควบคุม (Semi-transparent) */
+            --primary-light: #00f2fe;    /* สีฟ้าสว่าง (Cyan) สำหรับเน้น */
+            --primary-main: #4facfe;     /* สีน้ำเงินฟ้าหลัก */
+            --accent-blue: #1c2541;      /* สีน้ำเงินเข้มสำหรับองค์ประกอบรอง */
+            --text-main: #ffffff;
+            --text-muted: #a0aec0;
+            
+            /* เอฟเฟคแสงเรืองแสงความละเอียดสูง */
+            --glow-primary: 0 0 20px rgba(79, 172, 254, 0.5);
+            --glow-text: 0 0 10px rgba(0, 242, 254, 0.8);
+            
+            /* การตั้งค่า Animation */
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+            --anim-speed: 1s;
+        }
+
+        /* --- Reset & Base Styles --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+            -webkit-font-smoothing: antialiased; /* ทำให้ฟอนต์คมชัดขึ้นบน macOS */
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* ซ่อน Scrollbar ของ Body */
+            position: relative;
+        }
+
+        /* --- พื้นหลังเอฟเฟคแสงมิติสูง (High-Res Background Effects) --- */
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(150px);
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        body::before {
+            width: 500px; height: 500px;
+            background: var(--primary-main);
+            top: -100px; left: -100px;
+            animation: drift 15s infinite alternate var(--ease-out-expo);
+        }
+
+        body::after {
+            width: 400px; height: 400px;
+            background: var(--primary-light);
+            bottom: -50px; right: -50px;
+            animation: drift 20s infinite alternate-reverse var(--ease-out-expo);
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 50px); }
+        }
+
+        /* --- คอนเทนเนอร์หลัก (Main Container) พร้อมเอฟเฟคตอนเปิด --- */
+        .contact-card {
+            background: var(--bg-panel);
+            width: 90%;
+            max-width: 420px;
+            padding: 50px 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05); /* เส้นขอบบางๆ */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 
+                        0 0 100px rgba(79, 172, 254, 0.1);
+            
+            backdrop-filter: blur(20px); /* เอฟเฟคกระจกฝ้า (Glassmorphism) */
+            -webkit-backdrop-filter: blur(20px);
+            
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            
+            /* เอฟเฟคตอนเปิด (Entry Animation) */
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            animation: cardEntry var(--anim-speed) var(--ease-out-expo) forwards;
+        }
+
+        @keyframes cardEntry {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* --- โลโก้ (Logo Section) --- */
+        .logo-container {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 30px;
+            position: relative;
+            
+            /* เอฟเฟคตอนเปิดของโลโก้ */
+            opacity: 0;
+            transform: scale(0.5);
+            animation: logoEntry 0.8s var(--ease-out-expo) 0.3s forwards;
+        }
+
+        @keyframes logoEntry {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .logo-box {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            border: 2px solid rgba(0, 242, 254, 0.3);
+            box-shadow: var(--glow-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* แก้ไขตรงนี้เพื่อใส่รูปโลโก้ของคุณ */
+        .logo-box img {
+            width: 80%; /* หรือปรับตามความเหมาะสมของโลโก้ */
+            height: auto;
+            object-fit: contain;
+            /* ถ้าไม่มีรูป ให้ใช้ไอคอนชั่วคราว */
+            display: none; 
+        }
+
+        /* ไอคอนชั่วคราวตอนยังไม่มีรูป */
+        .logo-box i {
+            font-size: 50px;
+            color: var(--primary-light);
+            text-shadow: var(--glow-text);
+        }
+
+        /* แสงวงแหวนรอบโลโก้ */
+        .logo-container::before {
+            content: '';
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-light), transparent, var(--primary-main));
+            z-index: 1;
+            opacity: 0.5;
+            animation: pulseRing 3s infinite;
+        }
+
+        @keyframes pulseRing {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        /* --- ข้อความชื่อร้าน (Store Name) --- */
+        .store-name {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            
+            /* เอฟเฟคตอนเปิด */
+            opacity: 0;
+            animation: fadeInUp 0.6s var(--ease-out-expo) 0.5s forwards;
+        }
+
+        .store-desc {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            
+            /* เอฟเฟคตอนเปิด */
+            opacity: 0;
+            animation: fadeInUp 0.6s var(--ease-out-expo) 0.6s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- ปุ่มติดต่อ (Social Buttons Section) --- */
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* จัดไอคอนทางซ้าย */
+            padding: 18px 25px;
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s var(--ease-out-expo);
+            position: relative;
+            overflow: hidden;
+            
+            /* เอฟเฟคตอนเปิด (Delays สำหรับแต่ละปุ่ม) */
+            opacity: 0;
+            animation: fadeInUp 0.5s var(--ease-out-expo) forwards;
+        }
+
+        /* ตั้งเวลา Delay ให้ปุ่มค่อยๆ ปรากฏทีละอัน */
+        .social-btn:nth-child(1) { animation-delay: 0.7s; }
+        .social-btn:nth-child(2) { animation-delay: 0.8s; }
+        .social-btn:nth-child(3) { animation-delay: 0.9s; }
+
+        /* เอฟเฟค Hover ของปุ่ม */
+        .social-btn:hover {
+            transform: translateY(-5px);
+            background: rgba(79, 172, 254, 0.1);
+            border-color: rgba(0, 242, 254, 0.4);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 
+                        0 0 15px rgba(79, 172, 254, 0.2);
+        }
+
+        /* แสงวิ่งผ่านปุ่มเมื่อ Hover (Shine Effect) */
+        .social-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .social-btn:hover::after {
+            left: 100%;
+        }
+
+        /* ไอคอนและข้อความในปุ่ม */
+        .social-btn i {
+            font-size: 26px;
+            margin-right: 20px;
+            width: 30px; /* จองพื้นที่ให้ไอคอนเท่ากัน */
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .social-btn span {
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        /* สีไอคอนเจาะจง */
+        .social-btn.facebook i { color: #1877f2; }
+        .social-btn.line i { color: #00c300; }
+        .social-btn.discord i { color: #5865f2; }
+
+        /* เอฟเฟคเมื่อ Hover: ไอคอนเรืองแสง */
+        .social-btn:hover.facebook i,
+        .social-btn:hover.line i,
+        .social-btn:hover.discord i {
+            color: var(--primary-light);
+            text-shadow: var(--glow-text);
+            transform: scale(1.1);
+        }
+
+        /* --- Footer (Optional) --- */
+        .footer-text {
+            margin-top: 50px;
+            font-size: 12px;
+            color: var(--text-muted);
+            opacity: 0.5;
+            letter-spacing: 1px;
+            
+            /* เอฟเฟคตอนเปิด */
+            opacity: 0;
+            animation: fadeIn 1s ease 1.2s forwards;
+        }
+
+        @keyframes fadeIn { to { opacity: 0.5; } }
+
+    </style>
+</head>
+<body>
+
+    <div class="contact-card">
+        
+        <div class="logo-container">
+            <div class="logo-box">
+                <i class="fas fa-shopping-cart"></i> 
+            </div>
+        </div>
+
+        <h1 class="store-name">Prime Store</h1>
+        <p class="store-desc">ศูนย์รวมบริการเติมเกมและซื้อขายไอเทมและรหัสเกม</p>
+
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/18ataJdPWp/" target="_blank" class="social-btn facebook">
+                <i class="fab fa-facebook-f"></i>
+                <span>ติดต่อ Facebook</span>
+            </a>
+            
+            <a href="https://line.me/R/ti/p/@480rvvhg" target="_blank" class="social-btn line">
+                <i class="fab fa-line"></i>
+                <span>ติดต่อ LINE</span>
+            </a>
+            
+        </div>
+
+        <p class="footer-text">ติดต่อแอดมินเพิ่อซื้อ</p>
+    </div>
+
+</body>
+</html>
